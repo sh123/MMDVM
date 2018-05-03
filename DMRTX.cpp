@@ -274,7 +274,10 @@ void CDMRTX::writeByte(uint8_t c, uint8_t control)
   ::memset(controlBuffer, MARK_NONE, DMR_RADIO_SYMBOL_LENGTH * 4U * sizeof(uint8_t));
   controlBuffer[DMR_RADIO_SYMBOL_LENGTH * 2U] = control;  
 
+#ifdef HACKRF
+#else
   ::arm_fir_interpolate_q15(&m_modFilter, inBuffer, outBuffer, 4U);
+#endif
 
   io.write(STATE_DMR, outBuffer, DMR_RADIO_SYMBOL_LENGTH * 4U, controlBuffer);
 }

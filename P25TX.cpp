@@ -145,9 +145,12 @@ void CP25TX::writeByte(uint8_t c)
     }
   }
 
+#ifdef HACKRF
+#else
   ::arm_fir_interpolate_q15(&m_modFilter, inBuffer, intBuffer, 4U);
 
   ::arm_fir_fast_q15(&m_lpFilter, intBuffer, outBuffer, P25_RADIO_SYMBOL_LENGTH * 4U);
+#endif
 
   io.write(STATE_P25, outBuffer, P25_RADIO_SYMBOL_LENGTH * 4U);
 }

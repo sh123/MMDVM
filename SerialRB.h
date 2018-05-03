@@ -28,6 +28,8 @@ Boston, MA  02110-1301, USA.
 #elif defined(STM32F105xC)
 #include "stm32f1xx.h"
 #include <cstddef>
+#elif defined(HACKRF)
+#include <libhackrf/hackrf.h>
 #else
 #include <Arduino.h>
 #endif

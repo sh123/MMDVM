@@ -1,5 +1,7 @@
 /*
- *   Copyright (C) 2015,2016 by Jonathan Naylor G4KLX
+ *   Copyright (C) 2015,2016,2017,2018 by Jonathan Naylor G4KLX
+ *   Copyright (C) 2015 by Jim Mclaughlin KI6ZUM
+ *   Copyright (C) 2016 by Colin Durbridge G4EML
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,27 +18,65 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#if !defined(UTILS_H)
-#define  UTILS_H
+#include "Config.h"
+#include "Globals.h"
+#include "IO.h"
 
-#if defined(STM32F4XX)
-#include "stm32f4xx.h"
-#elif defined(STM32F7XX)
-#include "stm32f7xx.h"
-#elif defined(STM32F105xC)
-#include "stm32f1xx.h"
-#include <cstddef>
-#elif defined(HACKRF)
-#include <libhackrf/hackrf.h>
-#else
-#include <Arduino.h>
-#endif
+#if defined(HACKRF)
 
-uint8_t countBits8(uint8_t bits);
+const uint16_t DC_OFFSET = 2048U;
 
-uint8_t countBits32(uint32_t bits);
+void CIO::initInt()
+{
+}
 
-uint8_t countBits64(uint64_t bits);
+void CIO::startInt()
+{
+}
+
+void CIO::interrupt()
+{
+}
+
+bool CIO::getCOSInt()
+{
+}
+
+void CIO::setLEDInt(bool on)
+{
+}
+
+void CIO::setPTTInt(bool on)
+{
+}
+
+void CIO::setCOSInt(bool on)
+{
+}
+
+void CIO::setDStarInt(bool on)
+{
+}
+
+void CIO::setDMRInt(bool on)
+{
+}
+
+void CIO::setYSFInt(bool on)
+{
+}
+
+void CIO::setP25Int(bool on)
+{
+}
+
+void CIO::setNXDNInt(bool on)
+{
+}
+
+void CIO::delayInt(unsigned int dly)
+{
+}
 
 #endif
 

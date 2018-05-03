@@ -26,6 +26,9 @@
 #elif defined(STM32F105xC)
 #include "stm32f1xx.h"
 #include "STM32Utils.h"
+#elif defined(HACKRF)
+#include <string.h>
+#include <libhackrf/hackrf.h>
 #else
 #include <Arduino.h>
 #endif
@@ -37,10 +40,40 @@
 #elif defined(STM32F4XX) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
 #define  ARM_MATH_CM4
 #else
-#error "Unknown processor type"
+//#error "Unknown processor type"
 #endif
 
+#if defined(HACKRF)
+typedef int16_t q15_t;
+
+typedef int32_t q31_t;
+
+struct arm_fir_interpolate_instance_q15
+{
+  uint8_t 	L;
+  uint16_t 	phaseLength;
+  q15_t * 	pCoeffs;
+  q15_t * 	pState;
+};
+
+struct arm_fir_instance_q15
+{
+  uint16_t 	numTaps;
+  q15_t * 	pState;
+  q15_t * 	pCoeffs;
+};
+
+struct arm_biquad_casd_df1_inst_q31
+{
+  uint32_t 	numStages;
+  q31_t * 	pState;
+  q31_t * 	pCoeffs;
+  uint8_t 	postShift;
+};
+
+#else
 #include <arm_math.h>
+#endif
 
 enum MMDVM_STATE {
   STATE_IDLE      = 0,

@@ -425,7 +425,10 @@ void CDStarTX::writeByte(uint8_t c)
     mask <<= 1;
   }
 
+#ifdef HACKRF
+#else
   ::arm_fir_interpolate_q15(&m_modFilter, inBuffer, outBuffer, 8U);
+#endif
   
   io.write(STATE_DSTAR, outBuffer, DSTAR_RADIO_BIT_LENGTH * 8U);
 }
