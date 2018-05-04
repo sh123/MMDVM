@@ -98,22 +98,13 @@ hackrf: release_hackrf
 
 release_hackrf: $(BINDIR)
 release_hackrf: $(OBJDIR_HACKRF)
-release_hackrf: $(BINDIR)/$(BINHEX_HACKRF)
-release_hackrf: $(BINDIR)/$(BINBIN_HACKRF)
+release_hackrf: $(BINDIR)/$(BINELF_HACKRF)
 
 $(BINDIR):
 	$(MDDIRS)
 
 $(OBJDIR_HACKRF):
 	$(MDDIRS)
-
-$(BINDIR)/$(BINHEX_HACKRF): $(BINDIR)/$(BINELF_HACKRF)
-	$(CP) -O ihex $< $@
-	@echo "Objcopy from ELF to IHEX complete!\n"
-	
-$(BINDIR)/$(BINBIN_HACKRF): $(BINDIR)/$(BINELF_HACKRF)
-	$(CP) -O binary $< $@
-	@echo "Objcopy from ELF to BINARY complete!\n"
 
 $(BINDIR)/$(BINELF_HACKRF): $(OBJ_HACKRF)
 	$(CXX) $(OBJ_HACKRF) $(LDFLAGS) -o $@
