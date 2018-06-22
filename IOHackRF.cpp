@@ -27,11 +27,9 @@
 
 #if defined(HACKRF)
 
-const uint16_t DC_OFFSET = 2048U;
-
 static hackrf_device * iohackrf_device = NULL;
 
-int iohackrf_rx_callback(hackrf_transfer *transfer)
+static int iohackrf_rx_callback(hackrf_transfer *transfer)
 {
     LogDebug("iohackrf_rx_callback()");
     return 0;
@@ -158,7 +156,7 @@ void CIO::setPTTInt(bool on)
 
 void CIO::setCOSInt(bool on)
 {
-    LogDebug(__FUNCTION__);
+    //LogDebug(__FUNCTION__);
 }
 
 void CIO::setDStarInt(bool on)
