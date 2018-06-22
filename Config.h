@@ -72,7 +72,7 @@
 // HackRF paramerers
 #define IOHACKRF_SAMPLE_RATE_HZ 4000000
 #define IOHACKRF_FILTER_BW_HZ   1750000
-#define IOHACKRF_HW_SYNC_ON     true
+#define IOHACKRF_HW_SYNC_ON     false
 #define IOHACKRF_TX_VGA_GAIN    40
 #define IOHACKRF_RX_VGA_GAIN    40
 #define IOHACKRF_RX_LNA_GAIN    40
