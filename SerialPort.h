@@ -23,6 +23,9 @@
 #include "Globals.h"
 #include "SerialRB.h"
 
+#include "SerialPort.h"
+#include "SerialController.h"
+
 
 class CSerialPort {
 public:
