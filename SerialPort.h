@@ -65,7 +65,9 @@ private:
   uint8_t   m_len;
   bool      m_debug;
   CSerialRB m_repeat;
-
+#if defined(HACKRF)
+  CSerialController m_controller;
+#endif 
   void    sendACK();
   void    sendNAK(uint8_t err);
   void    getStatus();

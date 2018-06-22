@@ -20,17 +20,29 @@
 #include "Globals.h"
 
 #include "SerialPort.h"
+#include "SerialController.h"
+
+#include "Log.h"
+
+//#if defined(__SAM3X8E__) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
 
 #if defined(HACKRF)
+
+#include <unistd.h>
+
+#define VSERIAL "/dev/ptmx"  // move to Config.h
+
+#define BUF_MAX 1024
+unsigned char read_buffer;
 
 void CSerialPort::beginInt(uint8_t n, int speed)
 {
   switch (n) {
     case 1U:
-      break;
-    case 2U:
-      break;
-    case 3U:
+     //      Serial.begin(speed);
+      read_buffer = 0x00;
+      m_controller = CSerialController(VSERIAL, SERIAL_115200, false);
+      m_controller.open();
       break;
     default:
       break;
@@ -41,13 +53,9 @@ int CSerialPort::availableInt(uint8_t n)
 {
   switch (n) {
     case 1U:
-      return true;
-    case 2U:
-      return true;
-    case 3U:
-      return true;
+      return m_controller.read(&read_buffer,(uint8_t)(1 * sizeof(uint8_t)));
     default:
-      return false;
+      return 0;
   }
 }
 
@@ -55,10 +63,6 @@ int CSerialPort::availableForWriteInt(uint8_t n)
 {
   switch (n) {
     case 1U:
-      return true;
-    case 2U:
-      return true;
-    case 3U:
       return true;
     default:
       return false;
@@ -69,11 +73,7 @@ uint8_t CSerialPort::readInt(uint8_t n)
 {
   switch (n) {
     case 1U:
-      return 0;
-    case 2U:
-      return 0;
-    case 3U:
-      return 0;
+      return read_buffer;  
     default:
       return 0U;
   }
@@ -83,10 +83,7 @@ void CSerialPort::writeInt(uint8_t n, const uint8_t* data, uint16_t length, bool
 {
   switch (n) {
     case 1U:
-      break;
-    case 2U:
-      break;
-    case 3U:
+      m_controller.write(data, length);
       break;
     default:
       break;
