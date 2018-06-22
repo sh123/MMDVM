@@ -136,10 +136,7 @@ void CYSFTX::writeByte(uint8_t c)
     }
   }
 
-#ifdef HACKRF
-#else
   ::arm_fir_interpolate_q15(&m_modFilter, inBuffer, outBuffer, 4U);
-#endif
 
   io.write(STATE_YSF, outBuffer, YSF_RADIO_SYMBOL_LENGTH * 4U);
 }

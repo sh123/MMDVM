@@ -295,11 +295,7 @@ void CIO::process()
 
       q15_t res1 = q15_t(sample) - m_rxDCOffset;
       q31_t res2 = res1 * m_rxLevel;
- #ifdef HACKRF
-      samples[i] = q15_t(res2);
- #else
       samples[i] = q15_t(__SSAT((res2 >> 15), 16));
- #endif
     }
 
     if (m_lockout)
@@ -307,27 +303,17 @@ void CIO::process()
 
 #if defined(USE_DCBLOCKER)
     q31_t q31Samples[RX_BLOCK_SIZE];
-#ifdef HACKRF
-#else
     ::arm_q15_to_q31(samples, q31Samples, RX_BLOCK_SIZE);
-#endif
 
     q31_t dcValues[RX_BLOCK_SIZE];
-#ifdef HACKRF
-#else
     ::arm_biquad_cascade_df1_q31(&m_dcFilter, q31Samples, dcValues, RX_BLOCK_SIZE);
-#endif
 
     q31_t dcLevel = 0;
     for (uint8_t i = 0U; i < RX_BLOCK_SIZE; i++)
       dcLevel += dcValues[i];
     dcLevel /= RX_BLOCK_SIZE;
 
-#ifdef HACKRF
-    q15_t offset = q15_t(dcLevel);
-#else
     q15_t offset = q15_t(__SSAT((dcLevel >> 16), 16));;
-#endif
 
     q15_t dcSamples[RX_BLOCK_SIZE];
     for (uint8_t i = 0U; i < RX_BLOCK_SIZE; i++)
@@ -338,19 +324,9 @@ void CIO::process()
       if (m_dstarEnable) {
         q15_t GMSKVals[RX_BLOCK_SIZE];
 #if defined(USE_DCBLOCKER)
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_gaussianFilter, dcSamples, GMSKVals, RX_BLOCK_SIZE);
-#endif
-
-#else
-
-#ifdef HACKRF
 #else
         ::arm_fir_fast_q15(&m_gaussianFilter, samples, GMSKVals, RX_BLOCK_SIZE);
-#endif
-
 #endif
         dstarRX.samples(GMSKVals, rssi, RX_BLOCK_SIZE);
       }
@@ -358,19 +334,9 @@ void CIO::process()
       if (m_p25Enable) {
         q15_t P25Vals[RX_BLOCK_SIZE];
 #if defined(USE_DCBLOCKER)
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_boxcarFilter, dcSamples, P25Vals, RX_BLOCK_SIZE);
-#endif
-
-#else
-
-#ifdef HACKRF
 #else
         ::arm_fir_fast_q15(&m_boxcarFilter, samples, P25Vals, RX_BLOCK_SIZE);
-#endif
-
 #endif
         p25RX.samples(P25Vals, rssi, RX_BLOCK_SIZE);
       }
@@ -378,36 +344,18 @@ void CIO::process()
       if (m_nxdnEnable) {
         q15_t NXDNValsTmp[RX_BLOCK_SIZE];
 #if defined(USE_DCBLOCKER)
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_nxdnFilter, dcSamples, NXDNValsTmp, RX_BLOCK_SIZE);
-#endif
-
-#else
-
-#ifdef HACKRF
 #else
         ::arm_fir_fast_q15(&m_nxdnFilter, samples, NXDNValsTmp, RX_BLOCK_SIZE);
 #endif
-
-#endif
         q15_t NXDNVals[RX_BLOCK_SIZE];
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_nxdnISincFilter, NXDNValsTmp, NXDNVals, RX_BLOCK_SIZE);
-#endif
-
         nxdnRX.samples(NXDNVals, rssi, RX_BLOCK_SIZE);
       }
 
       if (m_dmrEnable || m_ysfEnable) {
         q15_t RRCVals[RX_BLOCK_SIZE];
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_rrcFilter, samples, RRCVals, RX_BLOCK_SIZE);
-#endif
 
         if (m_ysfEnable)
           ysfRX.samples(RRCVals, rssi, RX_BLOCK_SIZE);
@@ -423,29 +371,16 @@ void CIO::process()
       if (m_dstarEnable) {
         q15_t GMSKVals[RX_BLOCK_SIZE];
 #if defined(USE_DCBLOCKER)
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_gaussianFilter, dcSamples, GMSKVals, RX_BLOCK_SIZE);
-#endif
-
-#else
-
-#ifdef HACKRF
 #else
         ::arm_fir_fast_q15(&m_gaussianFilter, samples, GMSKVals, RX_BLOCK_SIZE);
-#endif
-
 #endif
         dstarRX.samples(GMSKVals, rssi, RX_BLOCK_SIZE);
       }
     } else if (m_modemState == STATE_DMR) {
       if (m_dmrEnable) {
         q15_t DMRVals[RX_BLOCK_SIZE];
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_rrcFilter, samples, DMRVals, RX_BLOCK_SIZE);
-#endif
 
         if (m_duplex) {
           // If the transmitter isn't on, use the DMR idle RX to detect the wakeup CSBKs
@@ -461,19 +396,9 @@ void CIO::process()
       if (m_ysfEnable) {
         q15_t YSFVals[RX_BLOCK_SIZE];
 #if defined(USE_DCBLOCKER)
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_rrcFilter, dcSamples, YSFVals, RX_BLOCK_SIZE);
-#endif
-
-#else
-
-#ifdef HACKRF
 #else
         ::arm_fir_fast_q15(&m_rrcFilter, samples, YSFVals, RX_BLOCK_SIZE);
-#endif
-
 #endif
         ysfRX.samples(YSFVals, rssi, RX_BLOCK_SIZE);
       }
@@ -481,19 +406,9 @@ void CIO::process()
       if (m_p25Enable) {
         q15_t P25Vals[RX_BLOCK_SIZE];
 #if defined(USE_DCBLOCKER)
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_boxcarFilter, dcSamples, P25Vals, RX_BLOCK_SIZE);
-#endif
-
-#else
-
-#ifdef HACKRF
 #else
         ::arm_fir_fast_q15(&m_boxcarFilter, samples, P25Vals, RX_BLOCK_SIZE);
-#endif
-
 #endif
         p25RX.samples(P25Vals, rssi, RX_BLOCK_SIZE);
       }
@@ -501,35 +416,18 @@ void CIO::process()
       if (m_nxdnEnable) {
         q15_t NXDNValsTmp[RX_BLOCK_SIZE];
 #if defined(USE_DCBLOCKER)
-
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_nxdnFilter, dcSamples, NXDNValsTmp, RX_BLOCK_SIZE);
-#endif
-
-#else
-
-#ifdef HACKRF
 #else
         ::arm_fir_fast_q15(&m_nxdnFilter, samples, NXDNValsTmp, RX_BLOCK_SIZE);
 #endif
-
-#endif
         q15_t NXDNVals[RX_BLOCK_SIZE];
-#ifdef HACKRF
-#else
         ::arm_fir_fast_q15(&m_nxdnISincFilter, NXDNValsTmp, NXDNVals, RX_BLOCK_SIZE);
-#endif
 
         nxdnRX.samples(NXDNVals, rssi, RX_BLOCK_SIZE);
       }
     } else if (m_modemState == STATE_DSTARCAL) {
       q15_t GMSKVals[RX_BLOCK_SIZE];
-#ifdef HACKRF
-#else
       ::arm_fir_fast_q15(&m_gaussianFilter, samples, GMSKVals, RX_BLOCK_SIZE);
-#endif
-
       calDStarRX.samples(GMSKVals, RX_BLOCK_SIZE);
     } else if (m_modemState == STATE_RSSICAL) {
       calRSSI.samples(rssi, RX_BLOCK_SIZE);
@@ -575,11 +473,7 @@ void CIO::write(MMDVM_STATE mode, q15_t* samples, uint16_t length, const uint8_t
 
   for (uint16_t i = 0U; i < length; i++) {
     q31_t res1 = samples[i] * txLevel;
- #ifdef HACKRF
-    q15_t res2 = q15_t(res1);
- #else
     q15_t res2 = q15_t(__SSAT((res1 >> 15), 16));
- #endif
     uint16_t res3 = uint16_t(res2 + m_txDCOffset);
 
     // Detect DAC overflow

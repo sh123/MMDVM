@@ -35,44 +35,17 @@
 
 #if defined(__SAM3X8E__) || defined(STM32F105xC)
 #define  ARM_MATH_CM3
+#include <arm_math.h>
 #elif defined(STM32F7XX)
 #define  ARM_MATH_CM7
+#include <arm_math.h>
 #elif defined(STM32F4XX) || defined(__MK20DX256__) || defined(__MK64FX512__) || defined(__MK66FX1M0__)
 #define  ARM_MATH_CM4
-#else
-//#error "Unknown processor type"
-#endif
-
-#if defined(HACKRF)
-typedef int16_t q15_t;
-
-typedef int32_t q31_t;
-
-struct arm_fir_interpolate_instance_q15
-{
-  uint8_t 	L;
-  uint16_t 	phaseLength;
-  q15_t * 	pCoeffs;
-  q15_t * 	pState;
-};
-
-struct arm_fir_instance_q15
-{
-  uint16_t 	numTaps;
-  q15_t * 	pState;
-  q15_t * 	pCoeffs;
-};
-
-struct arm_biquad_casd_df1_inst_q31
-{
-  uint32_t 	numStages;
-  q31_t * 	pState;
-  q31_t * 	pCoeffs;
-  uint8_t 	postShift;
-};
-
-#else
 #include <arm_math.h>
+#elif defined(HACKRF)
+#include "arm_math_hackrf.h"
+#else
+#error "Unknown processor type"
 #endif
 
 enum MMDVM_STATE {

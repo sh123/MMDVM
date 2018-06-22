@@ -148,12 +148,9 @@ void CNXDNTX::writeByte(uint8_t c)
     }
   }
 
-#ifdef HACKRF
-#else
   ::arm_fir_interpolate_q15(&m_modFilter, inBuffer, intBuffer, 4U);
 
   ::arm_fir_fast_q15(&m_sincFilter, intBuffer, outBuffer, NXDN_RADIO_SYMBOL_LENGTH * 4U);
-#endif
 
   io.write(STATE_NXDN, outBuffer, NXDN_RADIO_SYMBOL_LENGTH * 4U);
 }
