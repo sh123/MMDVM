@@ -31,7 +31,13 @@ static hackrf_device * iohackrf_device = NULL;
 
 static int iohackrf_rx_callback(hackrf_transfer *transfer)
 {
-    LogDebug("iohackrf_rx_callback()");
+    LogDebug("iohackrf_rx_callback(), len=%d, vlen=%d", transfer->buffer_length, transfer->valid_length);
+    return 0;
+}
+
+static int iohackrf_tx_callback(hackrf_transfer *transfer)
+{
+    LogDebug("iohackrf_tx_callback()");
     return 0;
 }
 
