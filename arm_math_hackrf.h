@@ -83,4 +83,32 @@ typedef struct
 
 #define __SSAT(x, y)  ((x>32767)  ? 32767 : ((x < -32768) ? -32768 : x))
 
+/**
+* @brief Instance structure for the Q15 FIR decimator.
+*/
+
+typedef struct
+{
+  uint8_t M;                  /**< decimation factor. */
+  uint16_t numTaps;           /**< number of coefficients in the filter. */
+  q15_t *pCoeffs;             /**< points to the coefficient array. The array is of length numTaps.*/
+  q15_t *pState;              /**< points to the state variable array. The array is of length numTaps+blockSize-1. */
+} arm_fir_decimate_instance_q15;
+
+/**
+ * @brief Processing function for the Q15 FIR decimator.
+ * @param[in] *S points to an instance of the Q15 FIR decimator structure.
+ * @param[in] *pSrc points to the block of input data.
+ * @param[out] *pDst points to the block of output data
+ * @param[in] blockSize number of input samples to process per call.
+ * @return none
+ */
+
+void arm_fir_decimate_q15(
+  const arm_fir_decimate_instance_q15 * S,
+  q15_t * pSrc,
+  q15_t * pDst,
+  uint32_t blockSize);
+
+
 #endif
