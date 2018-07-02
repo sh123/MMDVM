@@ -51,77 +51,77 @@ void CIO::initInt()
     if ((result = hackrf_init()) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_init() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("Opening HackRF...");
     if ((result = hackrf_open_by_serial(NULL, &iohackrf_device)) != HACKRF_SUCCESS)
     {
         LogError("hackrf_open_by_serial() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("Sample rate: %d", IOHACKRF_SAMPLE_RATE_HZ);
     if ((result = hackrf_set_sample_rate(iohackrf_device, IOHACKRF_SAMPLE_RATE_HZ)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_sample_rate() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("Baseband filter: %d", IOHACKRF_FILTER_BW_HZ);
     if ((result = hackrf_set_baseband_filter_bandwidth(iohackrf_device, IOHACKRF_FILTER_BW_HZ)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_baseband_filter_bandwidth() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("HW sync: %d", IOHACKRF_HW_SYNC_ON);
     if ((result = hackrf_set_hw_sync_mode(iohackrf_device, IOHACKRF_HW_SYNC_ON ? 1 : 0)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_hw_sync_node() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("VGA TX gain: %d", IOHACKRF_TX_VGA_GAIN);
     if ((result = hackrf_set_txvga_gain(iohackrf_device, IOHACKRF_TX_VGA_GAIN)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_txvga_gain() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("VGA RX gain: %d", IOHACKRF_RX_VGA_GAIN);
     if ((result = hackrf_set_vga_gain(iohackrf_device, IOHACKRF_RX_VGA_GAIN)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_vga_gain() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("LNA RX gain: %d", IOHACKRF_RX_LNA_GAIN);
     if ((result = hackrf_set_vga_gain(iohackrf_device, IOHACKRF_RX_LNA_GAIN)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_lna_gain() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("Frequency: %d", IOHACKRF_FREQ_HZ);
     if ((result = hackrf_set_freq(iohackrf_device, IOHACKRF_FREQ_HZ)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_freq() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("Amp enable: %d", IOHACKRF_AMP_ENABLE);
     if ((result = hackrf_set_amp_enable(iohackrf_device, (uint8_t)IOHACKRF_AMP_ENABLE)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_amp_enable() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     LogDebug("Ant enable: %d", IOHACKRF_ANT_ENABLE);
     if ((result = hackrf_set_antenna_enable(iohackrf_device, (uint8_t)IOHACKRF_ANT_ENABLE)) != HACKRF_SUCCESS) 
     {
         LogError("hackrf_set_antenna_enable() failed: %s", hackrf_error_name((hackrf_error)result));
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 }
 
